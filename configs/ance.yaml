@@ -1,0 +1,18 @@
+# Ablation: ANCE retriever instead of Contriever (Table 13).
+_base_: main_nfcorpus
+name: ance
+description: ANCE retriever ablation (Table 13)
+
+rag:
+  retriever: ance
+  save: results/nfc/ours/rag/trap_rag_ance_results.json
+
+evaluation:
+  rag_data: results/nfc/ours/rag/trap_rag_ance_results.json
+  save: results/nfc/ours/response/trap_ance_response_results.csv
+
+detector:
+  input: results/nfc/ours/response/trap_ance_response_results.csv
+  name: trap_ance_response_results
+  steps: [1, 2, 4, 6, 8, 10]
+  output_dir: results/nfc/ours/query_quota/ance

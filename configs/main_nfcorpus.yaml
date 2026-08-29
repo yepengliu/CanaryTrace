@@ -1,0 +1,61 @@
+# Main experiment: NFCorpus IP dataset, MS MARCO base, Contriever retriever.
+# Reproduces Table 1 (detection vs query quota), Figure 4 (retrieval accuracy),
+# Tables 2/3 (distortion/consistency), Table 5 (downstream). This file is the base
+# that the other configs inherit from via `_base_`.
+name: main_nfcorpus
+description: Main NFCorpus experiment (Table 1, Figure 4)
+
+models:
+  rag_llm: meta-llama/Llama-3.1-70B-Instruct   # RA-LLM (also the canary generator)
+  openai_model: gpt-4o-mini                    # attribute/entity/description/question synthesis
+  # openai_api_key: set via the OPENAI_API_KEY environment variable
+
+watermark:
+  watermark_model: meta-llama/Llama-3.1-70B-Instruct
+  gamma: 0.5               # green-list fraction
+  bias: 2.0               # delta: green-list logit boost
+  key: 123                 # watermark / detection key
+  max_new_tokens: 1000
+
+data:
+  base_dataset: msmarco
+  base_dataset_num: 200000
+  ip_dataset: nfcorpus
+  ip_loader: beir_split                                   # beir_split | corpus_file | local
+  ip_corpus_path: datasets/nfcorpus/corpus.jsonl
+  ip_queries_path: datasets/nfcorpus/queries.jsonl
+  trap_corpus_path: datasets/nfcorpus/trap_corpus.jsonl   # inserted canary documents
+  trap_queries_path: datasets/nfcorpus/trap_queries.jsonl # probing questions
+
+synthesize:
+  synthetic_num: 500
+  sample_ref_num: 1
+  subtopic_num: 1
+  entity_num: 3
+  sample_ent_num: 2
+  common_topic_num: 1
+  temperature: 0.5
+  top_p: 0.9
+  output: results/nfc/ours/synthetic_data_nfcorpus.json
+
+rag:
+  retriever: contriever    # contriever | ance
+  k_values: 3
+  task: trap               # trap (retrieve probing questions) | original
+  save: results/nfc/ours/rag/trap_rag_results.json
+
+evaluation:
+  task: rag_watermark      # rag_watermark | score_docs | answerability | watermarked_rallm
+  k: 3
+  sys_prompt: easy         # easy | eval | hard
+  max_new_tokens: 600
+  rag_data: results/nfc/ours/rag/trap_rag_results.json
+  save: results/nfc/ours/response/trap_response_results.csv
+
+detector:
+  input: results/nfc/ours/response/trap_response_results.csv
+  name: trap_response_results
+  pairing: random          # random | stride | mixed_stolen
+  steps: [2, 4, 6, 8, 10, 12, 14]
+  num_combinations: 500
+  output_dir: results/nfc/ours/query_quota/main

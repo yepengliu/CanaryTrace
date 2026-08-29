@@ -1,0 +1,17 @@
+# Subset-stolen scenario: only part of the IP dataset is leaked, so a query group
+# mixes watermarked (retrieved canary) and unwatermarked responses (Appendix B.1).
+# Requires both the main watermarked response CSV and the unwatermarked one
+# (run configs/unwatermarked.yaml first).
+_base_: main_nfcorpus
+name: substolen
+description: Subset-of-IP-dataset stolen scenario (Appendix B.1)
+
+detector:
+  pairing: mixed_stolen
+  input_wm: results/nfc/ours/response/trap_response_results.csv
+  input_unwm: results/nfc/ours/response/unwatermarked.csv
+  canary_num_in_list: [21, 20, 17, 18, 19, 20, 15, 18, 24, 20]
+  total_query: 48
+  num_combinations: 500
+  name: substolen
+  output_dir: results/nfc/ours/query_quota/substolen

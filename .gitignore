@@ -1,0 +1,23 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.ipynb_checkpoints/
+
+# Secrets -- never commit; see README ("Configuration")
+.env
+
+# Third-party checkouts fetched during setup (see README "Installation")
+third_party/
+
+# Datasets downloaded from BEIR on first run, and everything the pipeline writes
+datasets/
+results/
+*.zip
+*.tar.gz
+
+# Run logs (the directory itself is tracked via log/.gitkeep)
+*.log
+slurm-*.out
+log/*
+!log/.gitkeep

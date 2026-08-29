@@ -1,0 +1,11 @@
+# Query one canary document multiple times: repeat a single response `step` times
+# instead of combining distinct responses (Appendix B.4, Table 8). "stride" pairing.
+_base_: main_nfcorpus
+name: single
+description: Query a single canary multiple times (Table 8)
+
+detector:
+  pairing: stride
+  input: results/nfc/ours/response/trap_response_results.csv
+  steps: [12]
+  output_dir: results/nfc/ours/query_quota/single

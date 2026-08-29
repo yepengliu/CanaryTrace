@@ -1,0 +1,37 @@
+# Tiny end-to-end smoke test: exercises every stage's code path with minimal data.
+# Not a real experiment -- numbers are meaningless; it only checks the pipeline runs.
+_base_: main_nfcorpus
+name: smoke
+description: Minimal end-to-end smoke test
+
+models:
+  rag_llm: meta-llama/Llama-3.2-1B-Instruct     # small cached model; real runs use Llama-3.1-70B
+  dtype: float32                                # CPU-friendly (fp16 matmul unsupported on CPU)
+
+watermark:
+  watermark_model: meta-llama/Llama-3.2-1B-Instruct
+  max_new_tokens: 128
+
+data:
+  base_dataset_num: 200
+  trap_corpus_path: results/smoke/trap_corpus.jsonl
+  trap_queries_path: results/smoke/trap_queries.jsonl
+
+synthesize:
+  synthetic_num: 5
+  output: results/smoke/synthetic_data.json
+
+rag:
+  save: results/smoke/rag/trap_rag_results.json
+
+evaluation:
+  max_new_tokens: 128
+  rag_data: results/smoke/rag/trap_rag_results.json
+  save: results/smoke/response/trap_response_results.csv
+
+detector:
+  input: results/smoke/response/trap_response_results.csv
+  name: trap_response_results
+  steps: [2]
+  num_combinations: 3
+  output_dir: results/smoke/query_quota

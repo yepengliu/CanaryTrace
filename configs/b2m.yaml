@@ -1,0 +1,20 @@
+# Ablation: larger base dataset, 2 million MS MARCO documents (Table 14).
+_base_: main_nfcorpus
+name: b2m
+description: 2M base-dataset ablation (Table 14)
+
+data:
+  base_dataset_num: 2000000
+
+rag:
+  save: results/nfc/ours/rag/trap_rag_b2m_results.json
+
+evaluation:
+  rag_data: results/nfc/ours/rag/trap_rag_b2m_results.json
+  save: results/nfc/ours/response/trap_b2m_response_results.csv
+
+detector:
+  input: results/nfc/ours/response/trap_b2m_response_results.csv
+  name: trap_b2m_response_results
+  steps: [1, 2, 4, 6, 8, 10, 12]
+  output_dir: results/nfc/ours/query_quota/b2m

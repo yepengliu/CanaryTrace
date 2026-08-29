@@ -1,0 +1,15 @@
+# Unwatermarked baseline: score the raw IP/canary documents directly (no RAG, no LLM
+# generation). Produces the unwatermarked response CSV consumed by substolen.yaml.
+_base_: main_nfcorpus
+name: unwatermarked
+description: Unwatermarked baseline -- score documents directly
+
+evaluation:
+  task: score_docs
+  save: results/nfc/ours/response/unwatermarked.csv
+
+detector:
+  input: results/nfc/ours/response/unwatermarked.csv
+  name: unwatermarked
+  steps: [2, 4, 6, 8, 10, 12, 14]
+  output_dir: results/nfc/ours/query_quota/unwatermarked

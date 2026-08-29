@@ -1,0 +1,14 @@
+# Hard system prompt: restrictive instructions that discourage verbatim text /
+# excessive paraphrasing (Table 6).
+_base_: main_nfcorpus
+name: hard_prompt
+description: Detection under a hard system prompt (Table 6)
+
+evaluation:
+  sys_prompt: hard
+  save: results/nfc/ours/response_hard/trap_response_results.csv
+
+detector:
+  input: results/nfc/ours/response_hard/trap_response_results.csv
+  steps: [2, 6, 10, 14]
+  output_dir: results/nfc/ours/query_quota/hard_prompt

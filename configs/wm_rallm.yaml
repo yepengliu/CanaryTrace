@@ -1,0 +1,17 @@
+# Robustness: adversarial RA-LLM that re-watermarks its output with a different key (Table 10).
+_base_: main_nfcorpus
+name: wm_rallm
+description: Watermarked RA-LLM robustness (Table 10)
+
+evaluation:
+  task: watermarked_rallm
+  wm_key: 789            # the adversary's watermark key
+  detect_key: 123        # the data owner's detection key
+  bias: 2.0
+  max_new_tokens: 600
+  save: results/nfc/ours/response/wm_rallm/trap_response_results.csv
+
+detector:
+  input: results/nfc/ours/response/wm_rallm/trap_response_results.csv
+  steps: [2, 4, 6, 8, 10, 12, 14, 16, 18]
+  output_dir: results/nfc/ours/query_quota/wm_rallm

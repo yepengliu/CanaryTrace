@@ -1,0 +1,34 @@
+# Small real-model validation: the actual Llama-3.1-70B pipeline on a handful of
+# canaries and a reduced base corpus. Meaningful (if small) numbers -- unlike smoke.
+# Self-contained under results/nfc/ours/real_mini/ so it doesn't touch shipped data.
+_base_: main_nfcorpus
+name: real_mini
+description: Small real-model (Llama-3.1-70B) end-to-end validation
+
+models:
+  dtype: float16
+
+data:
+  base_dataset_num: 2000                                     # reduced from 200k for speed
+  trap_corpus_path: results/nfc/ours/real_mini/trap_corpus.jsonl
+  trap_queries_path: results/nfc/ours/real_mini/trap_queries.jsonl
+
+watermark:
+  max_new_tokens: 300
+
+synthesize:
+  synthetic_num: 8
+  output: results/nfc/ours/real_mini/synthetic_data.json
+
+rag:
+  save: results/nfc/ours/real_mini/rag/trap_rag_results.json
+
+evaluation:
+  rag_data: results/nfc/ours/real_mini/rag/trap_rag_results.json
+  save: results/nfc/ours/real_mini/response/trap_response_results.csv
+
+detector:
+  input: results/nfc/ours/real_mini/response/trap_response_results.csv
+  steps: [2, 4, 6]
+  num_combinations: 20
+  output_dir: results/nfc/ours/real_mini/query_quota

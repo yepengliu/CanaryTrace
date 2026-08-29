@@ -1,0 +1,19 @@
+# Ablation: retrieve only the single most relevant document, K = 1 (Table 15).
+_base_: main_nfcorpus
+name: k1
+description: K=1 retrieval ablation (Table 15)
+
+rag:
+  k_values: 1
+  save: results/nfc/ours/rag/trap_rag_k1_results.json
+
+evaluation:
+  k: 1
+  rag_data: results/nfc/ours/rag/trap_rag_k1_results.json
+  save: results/nfc/ours/response/trap_k1_response_results.csv
+
+detector:
+  input: results/nfc/ours/response/trap_k1_response_results.csv
+  name: trap_k1_response_results
+  steps: [1, 2, 4, 6, 8, 10, 12]
+  output_dir: results/nfc/ours/query_quota/k1

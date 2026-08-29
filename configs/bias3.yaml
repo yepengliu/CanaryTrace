@@ -1,0 +1,26 @@
+# Watermark-strength ablation: delta = 3 (Table 11).
+_base_: main_nfcorpus
+name: bias3
+description: Watermark strength delta=3 (Table 11)
+
+watermark:
+  bias: 3.0
+
+data:
+  trap_corpus_path: datasets/nfcorpus/ours/trap_corpus_bias3.jsonl
+  trap_queries_path: datasets/nfcorpus/ours/trap_queries_bias3.jsonl
+
+synthesize:
+  output: results/nfc/ours/synthetic_data_nfcorpus_bias3.json
+
+rag:
+  save: results/nfc/ours/rag/trap_rag_bias3_results.json
+
+evaluation:
+  rag_data: results/nfc/ours/rag/trap_rag_bias3_results.json
+  save: results/nfc/ours/response_b3/trap_response_results.csv
+
+detector:
+  input: results/nfc/ours/response_b3/trap_response_results.csv
+  steps: [1, 2, 4, 6, 8, 10, 12]
+  output_dir: results/nfc/ours/query_quota/bias3
